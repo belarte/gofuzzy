@@ -5,9 +5,39 @@ import (
 	"math"
 )
 
+type Object interface {
+	Get(attribute string) float64
+}
+
+type MembershipFunction interface {
+	Compute(o Object) float64
+}
+
+type TrueFunction struct {}
+
+type FalseFunction struct {}
+
+type Function struct {
+	attribute string
+	set Set
+}
+
+func (self TrueFunction) Compute(_ Object) float64 {
+	return 1.
+}
+
+func (self FalseFunction) Compute(_ Object) float64 {
+	return 0.
+}
+
+func (self Function) Compute(o Object) float64 {
+	value := o.Get(self.attribute)
+	return self.set(value)
+}
+
 type Set func(float64) float64
 
-func BooleanSetBuilder(lowCore, highCore float64) (Set,error) {
+func BooleanSetBuilder(lowCore, highCore float64) (Set, error) {
 	if lowCore > highCore {
 		return nil, errors.New("Error while constructing BooleanSet.\nIntervals are not properly set.")
 	}
@@ -54,9 +84,9 @@ func SinusoidalSetBuilder(lowSupport, lowCore, highCore, highSupport float64) (S
 
 		switch {
 		case x >= lowSupport && x < lowCore :
-			result = (math.Cos ((x-lowCore)*math.Pi/(lowCore-lowSupport)) +1) / 2;
+			result = (math.Cos((x-lowCore)*math.Pi/(lowCore-lowSupport))+1)/2;
 		case x > highCore && x <= highSupport :
-			result = (math.Cos ((x-highCore)*math.Pi/(highSupport-highCore)) +1) / 2;
+			result = (math.Cos((x-highCore)*math.Pi/(highSupport-highCore))+1)/2;
 		case x >= lowCore && x <= highCore :
 			result = 1.0;
 		}
