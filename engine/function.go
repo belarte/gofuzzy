@@ -5,8 +5,12 @@ import (
 	"math"
 )
 
-type Object interface {
-	Get(attribute string) float64
+type Object struct {
+	attributes map[string]float64
+}
+
+func (self Object) Get(name string) float64 {
+	return self.attributes[name]
 }
 
 type MembershipFunction interface {
