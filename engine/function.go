@@ -13,7 +13,7 @@ func (self Object) Get(name string) float64 {
 	return self.attributes[name]
 }
 
-type Function func(o Object) float64
+type Function func(Object) float64
 
 func TrueFunctionBuilder () Function {
 	return func (_ Object) float64 {
