@@ -9,8 +9,9 @@ type Object struct {
 	attributes map[string]float64
 }
 
-func (self Object) Get(name string) float64 {
-	return self.attributes[name]
+func (self Object) Get(name string) (float64, bool) {
+	res, check := self.attributes[name]
+	return res, check
 }
 
 type Function func(Object) float64
@@ -29,7 +30,7 @@ func FalseFunctionBuilder() Function {
 
 func FunctionBuilder(attribute string, set Set) Function {
 	return func(o Object) float64 {
-		value := o.Get(attribute)
+		value, _ := o.Get(attribute)
 		return set(value)
 	}
 }
