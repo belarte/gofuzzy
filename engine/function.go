@@ -15,20 +15,20 @@ func (self Object) Get(name string) float64 {
 
 type Function func(Object) float64
 
-func TrueFunctionBuilder () Function {
-	return func (_ Object) float64 {
+func TrueFunctionBuilder() Function {
+	return func(_ Object) float64 {
 		return 1.0
 	}
 }
 
-func FalseFunctionBuilder () Function {
+func FalseFunctionBuilder() Function {
 	return func(_ Object) float64 {
 		return 0.0
 	}
 }
 
 func FunctionBuilder(attribute string, set Set) Function {
-	return func (o Object) float64 {
+	return func(o Object) float64 {
 		value := o.Get(attribute)
 		return set(value)
 	}
@@ -61,12 +61,12 @@ func TrapezoidalSetBuilder(lowSupport, lowCore, highCore, highSupport float64) (
 		result := 0.
 
 		switch {
-		case x >= lowSupport && x < lowCore :
-			result = (x-lowSupport)/(lowCore-lowSupport);
-		case x > highCore && x <= highSupport :
-			result = (highSupport-x)/(highSupport-highCore);
-		case x >= lowCore && x <= highCore :
-			result = 1.0;
+		case x >= lowSupport && x < lowCore:
+			result = (x - lowSupport) / (lowCore - lowSupport)
+		case x > highCore && x <= highSupport:
+			result = (highSupport - x) / (highSupport - highCore)
+		case x >= lowCore && x <= highCore:
+			result = 1.0
 		}
 
 		return result
@@ -82,12 +82,12 @@ func SinusoidalSetBuilder(lowSupport, lowCore, highCore, highSupport float64) (S
 		result := 0.
 
 		switch {
-		case x >= lowSupport && x < lowCore :
-			result = (math.Cos((x-lowCore)*math.Pi/(lowCore-lowSupport))+1)/2;
-		case x > highCore && x <= highSupport :
-			result = (math.Cos((x-highCore)*math.Pi/(highSupport-highCore))+1)/2;
-		case x >= lowCore && x <= highCore :
-			result = 1.0;
+		case x >= lowSupport && x < lowCore:
+			result = (math.Cos((x-lowCore)*math.Pi/(lowCore-lowSupport)) + 1) / 2
+		case x > highCore && x <= highSupport:
+			result = (math.Cos((x-highCore)*math.Pi/(highSupport-highCore)) + 1) / 2
+		case x >= lowCore && x <= highCore:
+			result = 1.0
 		}
 
 		return result

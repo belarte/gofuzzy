@@ -1,8 +1,8 @@
 package engine
 
 import (
-	"testing"
 	"math"
+	"testing"
 )
 
 const (
@@ -15,14 +15,14 @@ const (
 	max        = 50.
 )
 
-var values = [...]float64 {
+var values = [...]float64{
 	min,
 	minSupport - epsilon,
 	minSupport,
 	minSupport + epsilon,
-	minSupport + (minCore - minSupport) / 4,
-	minSupport + (minCore - minSupport) / 2,
-	minSupport + 3 * (minCore - minSupport) / 4,
+	minSupport + (minCore-minSupport)/4,
+	minSupport + (minCore-minSupport)/2,
+	minSupport + 3*(minCore-minSupport)/4,
 	minCore - epsilon,
 	minCore,
 	minCore + epsilon,
@@ -30,9 +30,9 @@ var values = [...]float64 {
 	maxCore - epsilon,
 	maxCore,
 	maxCore + epsilon,
-	maxCore + (maxSupport - maxCore) / 4,
-	maxCore + (maxSupport - maxCore) / 2,
-	maxCore + 3 * (maxSupport - maxCore) / 4,
+	maxCore + (maxSupport-maxCore)/4,
+	maxCore + (maxSupport-maxCore)/2,
+	maxCore + 3*(maxSupport-maxCore)/4,
 	maxSupport - epsilon,
 	maxSupport,
 	maxSupport + epsilon,
@@ -47,7 +47,7 @@ func compareEpsilon(a, b float64) bool {
 }
 
 func TestBooleanSetBuilder(t *testing.T) {
-	var expected = []float64 {
+	var expected = []float64{
 		0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
 	}
 
@@ -66,7 +66,7 @@ func TestBooleanSetBuilder(t *testing.T) {
 }
 
 func TestTrapezoidalSetBuilder(t *testing.T) {
-	var expected = []float64 {
+	var expected = []float64{
 		0, 0, 0, 0, 0.25, 0.5, 0.75, 1, 1, 1, 1, 1, 1, 1, 0.75, 0.5, 0.25, 0, 0, 0, 0,
 	}
 
@@ -85,7 +85,7 @@ func TestTrapezoidalSetBuilder(t *testing.T) {
 }
 
 func TestSinusoidalSetBuilder(t *testing.T) {
-	var expected = []float64 {
+	var expected = []float64{
 		0, 0, 0, 0, 0.146447, 0.5, 0.853553, 1, 1, 1, 1, 1, 1, 1, 0.853553, 0.5, 0.146447, 0, 0, 0, 0,
 	}
 
