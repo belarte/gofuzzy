@@ -22,7 +22,7 @@ var fakeRight Function = func(_ Object) float64 {
 
 func TestBinaryExpressionBuilder(t *testing.T) {
 	expected := 0.25
-	var op Operator = MinAnd
+	var op Operator = minAnd
 
 	returned := BinaryExpressionBuilder(fakeLeft, fakeRight, op)
 	result := returned(Object{})
@@ -63,7 +63,7 @@ func TestMinAnd(t *testing.T) {
 
 	for i, lVal := range leftValues {
 		for j, rVal := range rightValues {
-			result := MinAnd(lVal, rVal)
+			result := minAnd(lVal, rVal)
 			exp := expected[j][i]
 
 			if result != exp {
@@ -82,7 +82,7 @@ func TestProductAnd(t *testing.T) {
 
 	for i, lVal := range leftValues {
 		for j, rVal := range rightValues {
-			result := ProductAnd(lVal, rVal)
+			result := productAnd(lVal, rVal)
 			exp := expected[j][i]
 
 			if result != exp {
@@ -101,7 +101,7 @@ func TestMaxOr(t *testing.T) {
 
 	for i, lVal := range leftValues {
 		for j, rVal := range rightValues {
-			result := MaxOr(lVal, rVal)
+			result := maxOr(lVal, rVal)
 			exp := expected[j][i]
 
 			if result != exp {
@@ -120,7 +120,7 @@ func TestSumOr(t *testing.T) {
 
 	for i, lVal := range leftValues {
 		for j, rVal := range rightValues {
-			result := SumOr(lVal, rVal)
+			result := sumOr(lVal, rVal)
 			exp := expected[j][i]
 
 			if result != exp {

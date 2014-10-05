@@ -24,18 +24,33 @@ func ValueExpressionBuilder(f Function) Function {
 
 type Operator func(float64, float64) float64
 
-func MinAnd(left, right float64) float64 {
+func NewOperator(s string) Operator {
+	switch s {
+	case "min":
+		return minAnd
+	case "product":
+		return productAnd
+	case "max":
+		return maxOr
+	case "sum":
+		return sumOr
+	}
+
+	return nil
+}
+
+func minAnd(left, right float64) float64 {
 	return math.Min(left, right)
 }
 
-func ProductAnd(left, right float64) float64 {
+func productAnd(left, right float64) float64 {
 	return left * right
 }
 
-func MaxOr(left, right float64) float64 {
+func maxOr(left, right float64) float64 {
 	return math.Max(left, right)
 }
 
-func SumOr(left, right float64) float64 {
+func sumOr(left, right float64) float64 {
 	return left + right - left*right
 }
