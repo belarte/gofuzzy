@@ -1,15 +1,18 @@
 package engine
 
-import "strings"
+import (
+	"regexp"
+	"strings"
+)
 
 var (
-	tokens []string
-	currentIndex int
+	tokens         []string
+	currentIndex   int
 	lastIdentifier string
 )
 
 func Parse(input string) Function {
-	tokens = make([]string,0)
+	tokens = make([]string, 0)
 	tokens = strings.Fields(input)
 
 	currentIndex = 0
@@ -27,7 +30,9 @@ func readKeyword(s string) bool {
 
 func readIdentifier() bool {
 	token := tokens[currentIndex]
-	if token != "and" && token != "or" && token != "not" {
+	r := regexp.MustCompile("^[A-Za-z][A-Za-z0-9_-]*$")
+
+	if r.MatchString(token) && token != "and" && token != "or" && token != "not" {
 		lastIdentifier = token
 		currentIndex++
 		return true
