@@ -98,7 +98,11 @@ func readValueExpression() (Function, error) {
 		}
 		return result, err
 	case readIdentifier():
-		result := ValueExpressionBuilder(nil)
+		f, check := knowledgeBase.GetFunction(lastIdentifier)
+		if !check {
+			return nil, errors.New("Unknown function")
+		}
+		result := ValueExpressionBuilder(f)
 		return result, nil
 	}
 
