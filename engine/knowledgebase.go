@@ -13,11 +13,13 @@ func NewKnowledgeBase() KnowledgeBase {
 }
 
 func (self KnowledgeBase) GetFunction(name string) (Function, bool) {
-	return self.functions[name]
+	value, check := self.functions[name]
+	return value, check
 }
 
 func (self KnowledgeBase) GetRule(name string) (Function, bool) {
-	return self.rules[name]
+	value, check := self.rules[name]
+	return value, check
 }
 
 func (self KnowledgeBase) AddFunction(name string, f Function) bool {
