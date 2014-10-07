@@ -4,6 +4,6 @@ var (
 	knowledgeBase KnowledgeBase
 )
 
-func init() {
+func Init() {
 	knowledgeBase = NewKnowledgeBase()
 }
