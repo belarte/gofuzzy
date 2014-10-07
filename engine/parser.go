@@ -15,6 +15,11 @@ var (
 )
 
 func Parse(input string) (Function, error) {
+	re1 := regexp.MustCompile("[(]")
+	re2 := regexp.MustCompile("[)]")
+	input = re1.ReplaceAllString(input, " ( ")
+	input = re2.ReplaceAllString(input, " ) ")
+
 	tokens = make([]string, 0)
 	tokens = strings.Fields(input)
 
@@ -37,7 +42,7 @@ func Parse(input string) (Function, error) {
 }
 
 func readKeyword(s string) bool {
-	if tokens[currentIndex] == s {
+	if currentIndex < len(tokens) && tokens[currentIndex] == s {
 		currentIndex++
 		return true
 	}
@@ -59,7 +64,7 @@ func readIdentifier() bool {
 func readExpression() (Function, error) {
 	result, err := readAndExpression()
 
-	for readKeyword("or") && err != nil {
+	for readKeyword("or") && err == nil {
 		right, err2 := readAndExpression()
 		result = BinaryExpressionBuilder(result, right, NewOperator(orOperator))
 		err = err2
