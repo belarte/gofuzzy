@@ -1,0 +1,41 @@
+package engine
+
+type KnowledgeBase struct {
+	functions map[string]Function
+	rules     map[string]Function
+}
+
+func NewKnowledgeBase() KnowledgeBase {
+	var result KnowledgeBase
+	result.functions = make(map[string]Function)
+	result.rules = make(map[string]Function)
+	return result
+}
+
+func (self KnowledgeBase) GetFunction(name string) (Function, bool) {
+	return self.functions[name]
+}
+
+func (self KnowledgeBase) GetRule(name string) (Function, bool) {
+	return self.rules[name]
+}
+
+func (self KnowledgeBase) AddFunction(name string, f Function) bool {
+	_, check := self.functions[name]
+
+	if !check {
+		self.functions[name] = f
+	}
+
+	return check
+}
+
+func (self KnowledgeBase) AddRule(name string, f Function) bool {
+	_, check := self.rules[name]
+
+	if !check {
+		self.rules[name] = f
+	}
+
+	return check
+}
