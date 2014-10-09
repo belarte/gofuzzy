@@ -2,9 +2,10 @@ package engine
 
 import (
 	"encoding/xml"
-	"fmt"
 	"io/ioutil"
 	"os"
+	"strconv"
+	"strings"
 )
 
 var (
@@ -15,30 +16,52 @@ func Init() {
 	knowledgeBase = NewKnowledgeBase()
 }
 
-func Open(name string) {
-	xmlFile, err := os.Open("../resources/test.xml")
+func Open(name string) error {
+	xmlFile, err := os.Open("../resources/" + name)
 	if err != nil {
-		fmt.Println("Error opening file:", err)
-		return
+		return err
 	}
 	defer xmlFile.Close()
 
 	b, err2 := ioutil.ReadAll(xmlFile)
 
 	if err2 != nil {
-		fmt.Println("Error reading file:", err2)
+		return err2
 	}
 
 	var base BaseDefinition
 	if err3 := xml.Unmarshal(b, &base); err3 != nil {
-		fmt.Println("Error unmarshaling:", err3)
+		return err3
 	}
 
-	for i, f := range base.Functions {
-		fmt.Println(i, f.Name)
+	for _, f := range base.Functions {
+		generateFunction(f)
 	}
-	for i, r := range base.Rules {
-		fmt.Println(i, r.Name, r.Definition)
+	for _, r := range base.Rules {
+		generateRule(r)
+	}
+
+	return nil
+}
+
+func generateFunction(def FunctionDefinition) {
+	paramsAsString := strings.Fields(def.Parameters)
+	paramsAsFloat := make([]float64, len(paramsAsString))
+
+	for i, s := range paramsAsString {
+		if f, err := strconv.ParseFloat(s, 64); err == nil {
+			paramsAsFloat[i] = f
+		}
+	}
+
+	if set, err := NewSet(def.Shape, paramsAsFloat); err == nil {
+		knowledgeBase.AddFunction(def.Name, FunctionBuilder(def.Attribute, set))
+	}
+}
+
+func generateRule(def RuleDefinition) {
+	if rule, err := Parse(def.Definition); err == nil {
+		knowledgeBase.AddRule(def.Name, rule)
 	}
 }
 
@@ -49,9 +72,11 @@ type BaseDefinition struct {
 }
 
 type FunctionDefinition struct {
-	XMLName xml.Name `xml:"function"`
-	Name    string   `xml:"name,attr"`
-	Shape   string   `xml:"type,attr"`
+	XMLName    xml.Name `xml:"function"`
+	Name       string   `xml:"name,attr"`
+	Attribute  string   `xml:"attribute,attr"`
+	Shape      string   `xml:"type,attr"`
+	Parameters string   `xml:"parameters,attr"`
 }
 
 type RuleDefinition struct {

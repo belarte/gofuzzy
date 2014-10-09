@@ -37,7 +37,7 @@ func FunctionBuilder(attribute string, set Set) Function {
 
 type Set func(float64) float64
 
-func NewSet (op string, params ...float64) (Set, error) {
+func NewSet(op string, params []float64) (Set, error) {
 	switch op {
 	case "boolean":
 		if len(params) != 2 {
