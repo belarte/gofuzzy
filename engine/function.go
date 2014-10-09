@@ -37,6 +37,27 @@ func FunctionBuilder(attribute string, set Set) Function {
 
 type Set func(float64) float64
 
+func NewSet (op string, params ...float64) (Set, error) {
+	switch op {
+	case "boolean":
+		if len(params) != 2 {
+			return nil, errors.New("Wrong number of arguments")
+		}
+		return BooleanSetBuilder(params[0], params[1])
+	case "trapezoidal":
+		if len(params) != 4 {
+			return nil, errors.New("Wrong number of arguments")
+		}
+		return TrapezoidalSetBuilder(params[0], params[1], params[2], params[3])
+	case "sinusoidal":
+		if len(params) != 4 {
+			return nil, errors.New("Wrong number of arguments")
+		}
+		return SinusoidalSetBuilder(params[0], params[1], params[2], params[3])
+	}
+	return nil, errors.New("Unable to generate set")
+}
+
 func BooleanSetBuilder(lowCore, highCore float64) (Set, error) {
 	if lowCore > highCore {
 		return nil, errors.New("Error while constructing BooleanSet.\nIntervals are not properly set.")
