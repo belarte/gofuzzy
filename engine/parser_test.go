@@ -2,19 +2,23 @@ package engine
 
 import "testing"
 
-var f1 Function = func(_ Object) float64 {
+type f1 struct {}
+func (self f1) Compute (_ Object) float64 {
 	return 0.25
 }
 
-var f2 Function = func(_ Object) float64 {
+type f2 struct {}
+func (self f2) Compute (_ Object) float64 {
 	return 0.5
 }
 
-var f3 Function = func(_ Object) float64 {
+type f3 struct {}
+func (self f3) Compute (_ Object) float64 {
 	return 0.75
 }
 
-var f4 Function = func(_ Object) float64 {
+type f4 struct {}
+func (self f4) Compute (_ Object) float64 {
 	return 0.125
 }
 
@@ -23,10 +27,10 @@ var ruleName string = "(not f1 or f2) and not (f3 and f4)"
 func initParserTest() {
 	Init()
 
-	knowledgeBase.AddFunction("f1", f1)
-	knowledgeBase.AddFunction("f2", f2)
-	knowledgeBase.AddFunction("f3", f3)
-	knowledgeBase.AddFunction("f4", f4)
+	knowledgeBase.AddFunction("f1", f1{})
+	knowledgeBase.AddFunction("f2", f2{})
+	knowledgeBase.AddFunction("f3", f3{})
+	knowledgeBase.AddFunction("f4", f4{})
 }
 
 func TestParse(t *testing.T) {

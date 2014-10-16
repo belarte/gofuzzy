@@ -20,7 +20,7 @@ func NegationExpressionBuilder(left Expression) Expression {
 
 func ValueExpressionBuilder(f Function) Expression {
 	return func(o Object) float64 {
-		return f(o)
+		return f.Compute(o)
 	}
 }
 

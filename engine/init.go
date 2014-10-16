@@ -54,8 +54,8 @@ func generateFunction(def FunctionDefinition) {
 		}
 	}
 
-	if set, err := NewSet(def.Shape, paramsAsFloat); err == nil {
-		knowledgeBase.AddFunction(def.Name, FunctionBuilder(def.Attribute, set))
+	if f, err := NewMembershipFunction(def.Attribute, def.Shape, paramsAsFloat); err == nil {
+		knowledgeBase.AddFunction(def.Name, f)
 	}
 }
 

@@ -14,25 +14,36 @@ func (self Object) Get(name string) (float64, bool) {
 	return res, check
 }
 
-type Function func(Object) float64
-
-func TrueFunctionBuilder() Function {
-	return func(_ Object) float64 {
-		return 1.0
-	}
+type Function interface {
+	Compute (o Object) float64
 }
 
-func FalseFunctionBuilder() Function {
-	return func(_ Object) float64 {
-		return 0.0
-	}
+type MembershipFunction struct {
+	attribute string
+	shape string
+	params []float64
+	set Set
 }
 
-func FunctionBuilder(attribute string, set Set) Function {
-	return func(o Object) float64 {
-		value, _ := o.Get(attribute)
-		return set(value)
-	}
+type TrueFunction struct {}
+type FalseFunction struct {}
+
+func NewMembershipFunction (attribute, shape string, params []float64) (MembershipFunction, error) {
+	set, err := NewSet(shape, params)
+	return MembershipFunction {attribute, shape, params, set}, err
+}
+
+func (self MembershipFunction) Compute (o Object) float64 {
+	value, _ := o.Get(self.attribute)
+	return self.set(value)
+}
+
+func (self TrueFunction) Compute (o Object) float64 {
+	return 1.0
+}
+
+func (self FalseFunction) Compute (o Object) float64 {
+	return 0.0
 }
 
 type Set func(float64) float64

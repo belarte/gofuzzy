@@ -12,11 +12,13 @@ var rightValues = [...]float64{
 	0.0, 0.5, 1.0,
 }
 
-var fakeLeft = func(_ Object) float64 {
+type fakeLeft struct {}
+func (self fakeLeft) Compute (_ Object) float64 {
 	return 0.25
 }
 
-var fakeRight = func(_ Object) float64 {
+type fakeRight struct {}
+func (self fakeRight) Compute (_ Object) float64 {
 	return 0.75
 }
 
@@ -24,7 +26,8 @@ func TestBinaryExpressionBuilder(t *testing.T) {
 	expected := 0.25
 	var op Operator = minAnd
 
-	returned := BinaryExpressionBuilder(fakeLeft, fakeRight, op)
+	returned := BinaryExpressionBuilder(ValueExpressionBuilder(fakeLeft{}),
+		ValueExpressionBuilder(fakeRight{}), op)
 	result := returned(Object{})
 
 	if result != expected {
@@ -35,7 +38,7 @@ func TestBinaryExpressionBuilder(t *testing.T) {
 func TestNegationExpressionBuilder(t *testing.T) {
 	expected := 0.75
 
-	returned := NegationExpressionBuilder(fakeLeft)
+	returned := NegationExpressionBuilder(ValueExpressionBuilder(fakeLeft{}))
 	result := returned(Object{})
 
 	if result != expected {
@@ -46,7 +49,7 @@ func TestNegationExpressionBuilder(t *testing.T) {
 func TestValueExpressionBuilder(t *testing.T) {
 	expected := 0.75
 
-	returned := ValueExpressionBuilder(fakeRight)
+	returned := ValueExpressionBuilder(fakeRight{})
 	result := returned(Object{})
 
 	if result != expected {
