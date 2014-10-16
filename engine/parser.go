@@ -14,7 +14,7 @@ var (
 	orOperator     string
 )
 
-func Parse(input string) (Function, error) {
+func Parse(input string) (Expression, error) {
 	re1 := regexp.MustCompile("[(]")
 	re2 := regexp.MustCompile("[)]")
 	input = re1.ReplaceAllString(input, " ( ")
@@ -61,7 +61,7 @@ func readIdentifier() bool {
 	return false
 }
 
-func readExpression() (Function, error) {
+func readExpression() (Expression, error) {
 	result, err := readAndExpression()
 
 	for readKeyword("or") && err == nil {
@@ -73,7 +73,7 @@ func readExpression() (Function, error) {
 	return result, err
 }
 
-func readAndExpression() (Function, error) {
+func readAndExpression() (Expression, error) {
 	result, err := readNegationExpression()
 
 	for readKeyword("and") && err == nil {
@@ -85,7 +85,7 @@ func readAndExpression() (Function, error) {
 	return result, err
 }
 
-func readNegationExpression() (Function, error) {
+func readNegationExpression() (Expression, error) {
 	if readKeyword("not") {
 		result, err := readNegationExpression()
 		return NegationExpressionBuilder(result), err
@@ -94,7 +94,7 @@ func readNegationExpression() (Function, error) {
 	}
 }
 
-func readValueExpression() (Function, error) {
+func readValueExpression() (Expression, error) {
 	switch {
 	case readKeyword("("):
 		result, err := readExpression()

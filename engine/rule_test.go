@@ -12,11 +12,11 @@ var rightValues = [...]float64{
 	0.0, 0.5, 1.0,
 }
 
-var fakeLeft Function = func(_ Object) float64 {
+var fakeLeft = func(_ Object) float64 {
 	return 0.25
 }
 
-var fakeRight Function = func(_ Object) float64 {
+var fakeRight = func(_ Object) float64 {
 	return 0.75
 }
 

@@ -4,19 +4,21 @@ import (
 	"math"
 )
 
-func BinaryExpressionBuilder(left, right Function, op Operator) Function {
+type Expression func(Object) float64
+
+func BinaryExpressionBuilder(left, right Expression, op Operator) Expression {
 	return func(o Object) float64 {
 		return op(left(o), right(o))
 	}
 }
 
-func NegationExpressionBuilder(left Function) Function {
+func NegationExpressionBuilder(left Expression) Expression {
 	return func(o Object) float64 {
 		return 1 - left(o)
 	}
 }
 
-func ValueExpressionBuilder(f Function) Function {
+func ValueExpressionBuilder(f Function) Expression {
 	return func(o Object) float64 {
 		return f(o)
 	}
