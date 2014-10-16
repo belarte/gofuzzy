@@ -12,13 +12,14 @@ var rightValues = [...]float64{
 	0.0, 0.5, 1.0,
 }
 
-type fakeLeft struct {}
-func (self fakeLeft) Compute (_ Object) float64 {
+type fakeLeft struct{}
+type fakeRight struct{}
+
+func (self fakeLeft) Compute(_ Object) float64 {
 	return 0.25
 }
 
-type fakeRight struct {}
-func (self fakeRight) Compute (_ Object) float64 {
+func (self fakeRight) Compute(_ Object) float64 {
 	return 0.75
 }
 

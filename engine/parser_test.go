@@ -2,23 +2,24 @@ package engine
 
 import "testing"
 
-type f1 struct {}
-func (self f1) Compute (_ Object) float64 {
+type f1 struct{}
+type f2 struct{}
+type f3 struct{}
+type f4 struct{}
+
+func (self f1) Compute(_ Object) float64 {
 	return 0.25
 }
 
-type f2 struct {}
-func (self f2) Compute (_ Object) float64 {
+func (self f2) Compute(_ Object) float64 {
 	return 0.5
 }
 
-type f3 struct {}
-func (self f3) Compute (_ Object) float64 {
+func (self f3) Compute(_ Object) float64 {
 	return 0.75
 }
 
-type f4 struct {}
-func (self f4) Compute (_ Object) float64 {
+func (self f4) Compute(_ Object) float64 {
 	return 0.125
 }
 

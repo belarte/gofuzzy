@@ -15,34 +15,34 @@ func (self Object) Get(name string) (float64, bool) {
 }
 
 type Function interface {
-	Compute (o Object) float64
+	Compute(o Object) float64
 }
 
 type MembershipFunction struct {
 	attribute string
-	shape string
-	params []float64
-	set Set
+	shape     string
+	params    []float64
+	set       Set
 }
 
-type TrueFunction struct {}
-type FalseFunction struct {}
+type TrueFunction struct{}
+type FalseFunction struct{}
 
-func NewMembershipFunction (attribute, shape string, params []float64) (MembershipFunction, error) {
+func NewMembershipFunction(attribute, shape string, params []float64) (MembershipFunction, error) {
 	set, err := NewSet(shape, params)
-	return MembershipFunction {attribute, shape, params, set}, err
+	return MembershipFunction{attribute, shape, params, set}, err
 }
 
-func (self MembershipFunction) Compute (o Object) float64 {
+func (self MembershipFunction) Compute(o Object) float64 {
 	value, _ := o.Get(self.attribute)
 	return self.set(value)
 }
 
-func (self TrueFunction) Compute (o Object) float64 {
+func (self TrueFunction) Compute(_ Object) float64 {
 	return 1.0
 }
 
-func (self FalseFunction) Compute (o Object) float64 {
+func (self FalseFunction) Compute(_ Object) float64 {
 	return 0.0
 }
 
