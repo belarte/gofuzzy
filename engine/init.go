@@ -10,10 +10,12 @@ import (
 
 var (
 	knowledgeBase KnowledgeBase
+	engine        Engine
 )
 
 func Init() {
 	knowledgeBase = NewKnowledgeBase()
+	engine = NewEngine("min", "max")
 }
 
 func Open(name string) error {
@@ -60,8 +62,8 @@ func generateFunction(def FunctionDefinition) {
 }
 
 func generateRule(def RuleDefinition) {
-	if rule, err := Parse(def.Definition); err == nil {
-		knowledgeBase.AddRule(def.Name, rule)
+	if expr, err := Parse(def.Definition); err == nil {
+		knowledgeBase.AddRule(def.Name, Rule{def.Name, expr, nil})
 	}
 }
 
