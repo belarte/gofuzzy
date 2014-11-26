@@ -32,6 +32,8 @@ func initParserTest() {
 	knowledgeBase.AddFunction("f2", f2{})
 	knowledgeBase.AddFunction("f3", f3{})
 	knowledgeBase.AddFunction("f4", f4{})
+
+	engine.Fuzzify(Object{})
 }
 
 func TestParse(t *testing.T) {
@@ -44,7 +46,7 @@ func TestParse(t *testing.T) {
 	}
 
 	expected := 0.75
-	result := rule(Object{})
+	result := rule()
 
 	if result != expected {
 		t.Errorf("Expected: %v, got: %v", expected, result)

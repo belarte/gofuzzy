@@ -4,23 +4,39 @@ import (
 	"math"
 )
 
-type Expression func(Object) float64
+type Rule struct {
+	name   string
+	input  Expression
+	output Expression
+}
 
-func BinaryExpressionBuilder(left, right Expression, op Operator) Expression {
-	return func(o Object) float64 {
-		return op(left(o), right(o))
+func (self Rule) Compute() (float64, Expression) {
+	return self.input(), self.output
+}
+
+type Expression func() float64
+
+func AndExpressionBuilder(left, right Expression) Expression {
+	return func() float64 {
+		return engine.andOperator(left(), right())
+	}
+}
+
+func OrExpressionBuilder(left, right Expression) Expression {
+	return func() float64 {
+		return engine.orOperator(left(), right())
 	}
 }
 
 func NegationExpressionBuilder(left Expression) Expression {
-	return func(o Object) float64 {
-		return 1 - left(o)
+	return func() float64 {
+		return 1 - left()
 	}
 }
 
-func ValueExpressionBuilder(f Function) Expression {
-	return func(o Object) float64 {
-		return f.Compute(o)
+func ValueExpressionBuilder(name string) Expression {
+	return func() float64 {
+		return engine.FunctionOutput(name)
 	}
 }
 

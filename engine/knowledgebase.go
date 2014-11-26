@@ -2,24 +2,32 @@ package engine
 
 type KnowledgeBase struct {
 	functions map[string]Function
-	rules     map[string]Expression
+	rules     map[string]Rule
 }
 
 func NewKnowledgeBase() KnowledgeBase {
 	var result KnowledgeBase
 	result.functions = make(map[string]Function)
-	result.rules = make(map[string]Expression)
+	result.rules = make(map[string]Rule)
 	return result
 }
 
-func (self KnowledgeBase) GetFunction(name string) (Function, bool) {
+func (self KnowledgeBase) Function(name string) (Function, bool) {
 	value, check := self.functions[name]
 	return value, check
 }
 
-func (self KnowledgeBase) GetRule(name string) (Expression, bool) {
+func (self KnowledgeBase) Functions() map[string]Function {
+	return self.functions
+}
+
+func (self KnowledgeBase) Rule(name string) (Rule, bool) {
 	value, check := self.rules[name]
 	return value, check
+}
+
+func (self KnowledgeBase) Rules() map[string]Rule {
+	return self.rules
 }
 
 func (self KnowledgeBase) AddFunction(name string, f Function) bool {
@@ -32,11 +40,11 @@ func (self KnowledgeBase) AddFunction(name string, f Function) bool {
 	return check
 }
 
-func (self KnowledgeBase) AddRule(name string, f Expression) bool {
+func (self KnowledgeBase) AddRule(name string, r Rule) bool {
 	_, check := self.rules[name]
 
 	if !check {
-		self.rules[name] = f
+		self.rules[name] = r
 	}
 
 	return check

@@ -66,7 +66,7 @@ func readExpression() (Expression, error) {
 
 	for readKeyword("or") && err == nil {
 		right, err2 := readAndExpression()
-		result = BinaryExpressionBuilder(result, right, NewOperator(orOperator))
+		result = OrExpressionBuilder(result, right)
 		err = err2
 	}
 
@@ -78,7 +78,7 @@ func readAndExpression() (Expression, error) {
 
 	for readKeyword("and") && err == nil {
 		right, err2 := readNegationExpression()
-		result = BinaryExpressionBuilder(result, right, NewOperator(andOperator))
+		result = AndExpressionBuilder(result, right)
 		err = err2
 	}
 
@@ -103,11 +103,11 @@ func readValueExpression() (Expression, error) {
 		}
 		return result, err
 	case readIdentifier():
-		f, check := knowledgeBase.GetFunction(lastIdentifier)
+		_, check := knowledgeBase.Function(lastIdentifier)
 		if !check {
-			return nil, errors.New("Unknown function")
+			return nil, errors.New("Unknown function: " + lastIdentifier)
 		}
-		result := ValueExpressionBuilder(f)
+		result := ValueExpressionBuilder(lastIdentifier)
 		return result, nil
 	}
 

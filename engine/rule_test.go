@@ -12,24 +12,15 @@ var rightValues = [...]float64{
 	0.0, 0.5, 1.0,
 }
 
-type fakeLeft struct{}
-type fakeRight struct{}
-
-func (self fakeLeft) Compute(_ Object) float64 {
-	return 0.25
-}
-
-func (self fakeRight) Compute(_ Object) float64 {
-	return 0.75
-}
-
 func TestBinaryExpressionBuilder(t *testing.T) {
 	expected := 0.25
-	var op Operator = minAnd
 
-	returned := BinaryExpressionBuilder(ValueExpressionBuilder(fakeLeft{}),
-		ValueExpressionBuilder(fakeRight{}), op)
-	result := returned(Object{})
+	engine.AddFunction("fakeLeft", 0.25)
+	engine.AddFunction("fakeRight", 0.75)
+
+	returned := AndExpressionBuilder(ValueExpressionBuilder("fakeLeft"),
+		ValueExpressionBuilder("fakeRight"))
+	result := returned()
 
 	if result != expected {
 		t.Errorf("Expected: %v, got: %v", expected, result)
@@ -39,8 +30,8 @@ func TestBinaryExpressionBuilder(t *testing.T) {
 func TestNegationExpressionBuilder(t *testing.T) {
 	expected := 0.75
 
-	returned := NegationExpressionBuilder(ValueExpressionBuilder(fakeLeft{}))
-	result := returned(Object{})
+	returned := NegationExpressionBuilder(ValueExpressionBuilder("fakeLeft"))
+	result := returned()
 
 	if result != expected {
 		t.Errorf("Expected: %v, got: %v", expected, result)
@@ -50,8 +41,8 @@ func TestNegationExpressionBuilder(t *testing.T) {
 func TestValueExpressionBuilder(t *testing.T) {
 	expected := 0.75
 
-	returned := ValueExpressionBuilder(fakeRight{})
-	result := returned(Object{})
+	returned := ValueExpressionBuilder("fakeRight")
+	result := returned()
 
 	if result != expected {
 		t.Errorf("Expected: %v, got: %v", expected, result)
