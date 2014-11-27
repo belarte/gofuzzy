@@ -1,11 +1,15 @@
 package engine
 
+import "math"
+
 type Engine struct {
 	andOperator           Operator
 	orOperator            Operator
 	functionsOutput       map[string]float64
 	rulesOutputValue      map[string]float64
-	rulesOutputExpression map[string]Expression
+	rulesOutputExpression map[string]MembershipFunction
+	result float64
+	isComputed bool
 }
 
 func NewEngine(and, or string) Engine {
@@ -14,7 +18,7 @@ func NewEngine(and, or string) Engine {
 	result.orOperator = NewOperator(or)
 	result.functionsOutput = make(map[string]float64)
 	result.rulesOutputValue = make(map[string]float64)
-	result.rulesOutputExpression = make(map[string]Expression)
+	result.rulesOutputExpression = make(map[string]MembershipFunction)
 	return result
 }
 
@@ -24,6 +28,12 @@ func (self Engine) AddFunction(name string, value float64) {
 
 func (self Engine) FunctionOutput(name string) float64 {
 	return self.functionsOutput[name]
+}
+
+func (self Engine) Compute () {
+	self.Fuzzify(Object{})
+	self.Infer()
+	self.Defuzzify()
 }
 
 func (self Engine) Fuzzify(obj Object) {
@@ -50,5 +60,40 @@ func (self Engine) Infer() {
 }
 
 func (self Engine) Defuzzify() {
+	min, max := self.getMinMax()
 
+	defuzzifier := COGDefuzzifier {min, max}
+
+	self.result = defuzzifier.Compute()
+	self.isComputed = true
+}
+
+func (self Engine) getMinMax() (float64,float64) {
+	min := math.MaxFloat64
+	max := -math.MaxFloat64
+
+	for _, function := range self.rulesOutputExpression {
+		temp := function.Min()
+		if temp < min {
+			min = temp
+		}
+
+		temp = function.Max()
+		if temp > max {
+			max = temp
+		}
+	}
+
+	return min, max
+}
+
+func (self Engine) computeValue(x float64) float64 {
+	var result float64 = 0.0
+
+	for key, output := range self.rulesOutputExpression {
+		y := math.Min(output.ComputeWithValue(x), self.rulesOutputValue[key])
+		result = math.Max(result, y)
+	}
+
+	return result
 }

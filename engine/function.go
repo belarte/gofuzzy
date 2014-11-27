@@ -38,6 +38,18 @@ func (self MembershipFunction) Compute(o Object) float64 {
 	return self.set(value)
 }
 
+func (self MembershipFunction) ComputeWithValue(x float64) float64 {
+	return self.set(x)
+}
+
+func (self MembershipFunction) Min() float64 {
+	return self.params[0]
+}
+
+func (self MembershipFunction) Max() float64 {
+	return self.params[len(self.params)-1]
+}
+
 func (self TrueFunction) Compute(_ Object) float64 {
 	return 1.0
 }

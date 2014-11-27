@@ -7,11 +7,11 @@ import (
 type Rule struct {
 	name   string
 	input  Expression
-	output Expression
+	output *MembershipFunction
 }
 
-func (self Rule) Compute() (float64, Expression) {
-	return self.input(), self.output
+func (self Rule) Compute() (float64, MembershipFunction) {
+	return self.input(), *self.output
 }
 
 type Expression func() float64
