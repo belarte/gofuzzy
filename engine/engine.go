@@ -2,9 +2,19 @@ package engine
 
 import "math"
 
+type Settings struct {
+	andOperator string
+	orOperator	string
+}
+
+func NewSetings(and, or string) Settings {
+	var result Setings
+	result.andOperator = NewOperator(and)
+	result.orOperator = NewOperator(or)
+	return result
+}
+
 type Engine struct {
-	andOperator           Operator
-	orOperator            Operator
 	functionsOutput       map[string]float64
 	rulesOutputValue      map[string]float64
 	rulesOutputExpression map[string]MembershipFunction
@@ -14,8 +24,6 @@ type Engine struct {
 
 func NewEngine(and, or string) Engine {
 	var result Engine
-	result.andOperator = NewOperator(and)
-	result.orOperator = NewOperator(or)
 	result.functionsOutput = make(map[string]float64)
 	result.rulesOutputValue = make(map[string]float64)
 	result.rulesOutputExpression = make(map[string]MembershipFunction)

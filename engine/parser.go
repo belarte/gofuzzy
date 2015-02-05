@@ -10,8 +10,6 @@ var (
 	tokens         []string
 	currentIndex   int
 	lastIdentifier string
-	andOperator    string
-	orOperator     string
 )
 
 func Parse(input string) (Expression, error) {
@@ -25,8 +23,6 @@ func Parse(input string) (Expression, error) {
 
 	currentIndex = 0
 	lastIdentifier = ""
-	andOperator = "min"
-	orOperator = "max"
 
 	if len(tokens) == 0 {
 		return nil, errors.New("Empty input")
