@@ -2,27 +2,15 @@ package engine
 
 import "math"
 
-type Settings struct {
-	andOperator string
-	orOperator	string
-}
-
-func NewSetings(and, or string) Settings {
-	var result Setings
-	result.andOperator = NewOperator(and)
-	result.orOperator = NewOperator(or)
-	return result
-}
-
 type Engine struct {
 	functionsOutput       map[string]float64
 	rulesOutputValue      map[string]float64
 	rulesOutputExpression map[string]MembershipFunction
-	result float64
-	isComputed bool
+	result                float64
+	isComputed            bool
 }
 
-func NewEngine(and, or string) Engine {
+func NewEngine() Engine {
 	var result Engine
 	result.functionsOutput = make(map[string]float64)
 	result.rulesOutputValue = make(map[string]float64)
@@ -38,7 +26,7 @@ func (self Engine) FunctionOutput(name string) float64 {
 	return self.functionsOutput[name]
 }
 
-func (self Engine) Compute () {
+func (self Engine) Compute() {
 	self.Fuzzify(Object{})
 	self.Infer()
 	self.Defuzzify()
@@ -70,13 +58,13 @@ func (self Engine) Infer() {
 func (self Engine) Defuzzify() {
 	min, max := self.getMinMax()
 
-	defuzzifier := COGDefuzzifier {min, max}
+	defuzzifier := COGDefuzzifier{min, max}
 
 	self.result = defuzzifier.Compute()
 	self.isComputed = true
 }
 
-func (self Engine) getMinMax() (float64,float64) {
+func (self Engine) getMinMax() (float64, float64) {
 	min := math.MaxFloat64
 	max := -math.MaxFloat64
 

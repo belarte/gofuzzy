@@ -11,11 +11,22 @@ import (
 var (
 	knowledgeBase KnowledgeBase
 	engine        Engine
+	andOperator   string
+	orOperator    string
+
+	Operators = map[string]Operator{
+		"min":     minAnd,
+		"product": productAnd,
+		"max":     maxOr,
+		"sum":     sumOr,
+	}
 )
 
 func Init() {
 	knowledgeBase = NewKnowledgeBase()
-	engine = NewEngine("min", "max")
+	engine = NewEngine()
+	andOperator = "min"
+	orOperator = "max"
 }
 
 func Open(name string) error {

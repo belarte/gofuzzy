@@ -18,13 +18,15 @@ type Expression func() float64
 
 func AndExpressionBuilder(left, right Expression) Expression {
 	return func() float64 {
-		return engine.andOperator(left(), right())
+		op := Operators[andOperator]
+		return op(left(), right())
 	}
 }
 
 func OrExpressionBuilder(left, right Expression) Expression {
 	return func() float64 {
-		return engine.orOperator(left(), right())
+		op := Operators[orOperator]
+		return op(left(), right())
 	}
 }
 
@@ -41,21 +43,6 @@ func ValueExpressionBuilder(name string) Expression {
 }
 
 type Operator func(float64, float64) float64
-
-func NewOperator(s string) Operator {
-	switch s {
-	case "min":
-		return minAnd
-	case "product":
-		return productAnd
-	case "max":
-		return maxOr
-	case "sum":
-		return sumOr
-	}
-
-	return nil
-}
 
 func minAnd(left, right float64) float64 {
 	return math.Min(left, right)
