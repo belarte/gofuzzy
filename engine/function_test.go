@@ -1,12 +1,11 @@
 package engine
 
 import (
-	"math"
 	"testing"
+	"github.com/belarte/gofuzzy/utilities"
 )
 
 const (
-	epsilon    = 0.000001
 	min        = 0.
 	minSupport = 10.
 	minCore    = 20.
@@ -17,33 +16,26 @@ const (
 
 var values = [...]float64{
 	min,
-	minSupport - epsilon,
+	minSupport - utilities.Epsilon,
 	minSupport,
-	minSupport + epsilon,
+	minSupport + utilities.Epsilon,
 	minSupport + (minCore-minSupport)/4,
 	minSupport + (minCore-minSupport)/2,
 	minSupport + 3*(minCore-minSupport)/4,
-	minCore - epsilon,
+	minCore - utilities.Epsilon,
 	minCore,
-	minCore + epsilon,
+	minCore + utilities.Epsilon,
 	(minCore + maxCore) / 2,
-	maxCore - epsilon,
+	maxCore - utilities.Epsilon,
 	maxCore,
-	maxCore + epsilon,
+	maxCore + utilities.Epsilon,
 	maxCore + (maxSupport-maxCore)/4,
 	maxCore + (maxSupport-maxCore)/2,
 	maxCore + 3*(maxSupport-maxCore)/4,
-	maxSupport - epsilon,
+	maxSupport - utilities.Epsilon,
 	maxSupport,
-	maxSupport + epsilon,
+	maxSupport + utilities.Epsilon,
 	max,
-}
-
-func compareEpsilon(a, b float64) bool {
-	va := math.Abs(a)
-	vb := math.Abs(b)
-	diff := math.Abs(va - vb)
-	return diff < epsilon
 }
 
 func TestBooleanSetBuilder(t *testing.T) {
@@ -59,7 +51,7 @@ func TestBooleanSetBuilder(t *testing.T) {
 
 	for i, value := range values {
 		result := function(value)
-		if !compareEpsilon(result, expected[i]) {
+		if !utilities.CompareEpsilon(result, expected[i]) {
 			t.Errorf("Expected: %v, got: %v", expected[i], result)
 		}
 	}
@@ -78,7 +70,7 @@ func TestTrapezoidalSetBuilder(t *testing.T) {
 
 	for i, value := range values {
 		result := function(value)
-		if !compareEpsilon(result, expected[i]) {
+		if !utilities.CompareEpsilon(result, expected[i]) {
 			t.Errorf("Expected: %v, got: %v", expected[i], result)
 		}
 	}
@@ -97,7 +89,7 @@ func TestSinusoidalSetBuilder(t *testing.T) {
 
 	for i, value := range values {
 		result := function(value)
-		if !compareEpsilon(result, expected[i]) {
+		if !utilities.CompareEpsilon(result, expected[i]) {
 			t.Errorf("Expected: %v, got: %v", expected[i], result)
 		}
 	}
