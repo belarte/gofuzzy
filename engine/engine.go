@@ -1,6 +1,8 @@
 package engine
 
-import "math"
+import (
+	"math"
+)
 
 type Engine struct {
 	functionsOutput       map[string]float64
@@ -58,9 +60,8 @@ func (self Engine) Infer() {
 func (self Engine) Defuzzify() {
 	min, max := self.getMinMax()
 
-	defuzzifier := COGDefuzzifier{min, max}
+	self.result = Operators[defuzzyOperator](min, max)
 
-	self.result = defuzzifier.Compute()
 	self.isComputed = true
 }
 
@@ -81,15 +82,4 @@ func (self Engine) getMinMax() (float64, float64) {
 	}
 
 	return min, max
-}
-
-func (self Engine) computeValue(x float64) float64 {
-	var result float64 = 0.0
-
-	for key, output := range self.rulesOutputExpression {
-		y := math.Min(output.ComputeWithValue(x), self.rulesOutputValue[key])
-		result = math.Max(result, y)
-	}
-
-	return result
 }

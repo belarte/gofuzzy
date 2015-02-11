@@ -1,27 +1,19 @@
 package engine
 
-const (
-	NB_STEPS = 1000
+import (
+	"math"
 )
 
-type Defuzzifier interface {
-	Compute() float64
-}
-
-type COGDefuzzifier struct {
-	min, max float64
-}
-
-func (self COGDefuzzifier) Compute() float64 {
+func COGDefuzzifier(min, max float64) float64 {
 	result := 0.0
-	step := (self.max - self.min) / NB_STEPS
+	step := (max - min) / float64(steps)
 
-	x := self.min
-	ya := engine.computeValue(x)
+	x := min
+	ya := computeValue(x)
 
-	for x <= self.max {
+	for x <= max {
 		x += step
-		yb := engine.computeValue(x)
+		yb := computeValue(x)
 
 		result += step * (ya + yb) / 2
 		ya = yb
@@ -30,22 +22,18 @@ func (self COGDefuzzifier) Compute() float64 {
 	return result
 }
 
-type MMDefuzzifier struct {
-	min, max float64
-}
+func MMDefuzzifier(min, max float64) float64 {
+	step := (max - min) / float64(steps)
 
-func (self MMDefuzzifier) Compute() float64 {
-	step := (self.max - self.min) / NB_STEPS
-
-	x := self.min
-	y := engine.computeValue(x)
+	x := min
+	y := computeValue(x)
 	maxvalue := y
 	start := x
 	stop := x
 
-	for x <= self.max {
+	for x <= max {
 		x += step
-		y = engine.computeValue(x)
+		y = computeValue(x)
 
 		if y > maxvalue {
 			maxvalue = y
@@ -57,4 +45,15 @@ func (self MMDefuzzifier) Compute() float64 {
 	}
 
 	return (stop + start) / 2
+}
+
+func computeValue(x float64) float64 {
+	var result float64 = 0.0
+
+	for key, output := range engine.rulesOutputExpression {
+		y := math.Min(output.ComputeWithValue(x), engine.rulesOutputValue[key])
+		result = math.Max(result, y)
+	}
+
+	return result
 }

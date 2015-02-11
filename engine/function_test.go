@@ -1,8 +1,8 @@
 package engine
 
 import (
-	"testing"
 	"github.com/belarte/gofuzzy/utilities"
+	"testing"
 )
 
 const (

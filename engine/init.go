@@ -9,16 +9,20 @@ import (
 )
 
 var (
-	knowledgeBase KnowledgeBase
-	engine        Engine
-	andOperator   string
-	orOperator    string
+	knowledgeBase   KnowledgeBase
+	engine          Engine
+	andOperator     string
+	orOperator      string
+	defuzzyOperator string
+	steps           int
 
 	Operators = map[string]Operator{
 		"min":     minAnd,
 		"product": productAnd,
 		"max":     maxOr,
 		"sum":     sumOr,
+		"cog":     COGDefuzzifier,
+		"mm":      MMDefuzzifier,
 	}
 )
 
@@ -27,6 +31,8 @@ func Init() {
 	engine = NewEngine()
 	andOperator = "min"
 	orOperator = "max"
+	defuzzyOperator = "cog"
+	steps = 1000
 }
 
 func Open(name string) error {
