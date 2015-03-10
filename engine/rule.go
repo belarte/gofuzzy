@@ -2,6 +2,7 @@ package engine
 
 import (
 	"math"
+	"log"
 )
 
 type Rule struct {
@@ -38,7 +39,11 @@ func NegationExpressionBuilder(left Expression) Expression {
 
 func ValueExpressionBuilder(name string) Expression {
 	return func() float64 {
-		return engine.FunctionOutput(name)
+		val, check := engine.FunctionOutput(name)
+		if !check {
+			log.Println("Function `", name, "' not found.")
+		}
+		return val
 	}
 }
 

@@ -9,6 +9,12 @@ type Object struct {
 	attributes map[string]float64
 }
 
+func NewObject(attributes map[string]float64) Object {
+	var result Object
+	result.attributes = attributes
+	return result
+}
+
 func (self Object) Get(name string) (float64, bool) {
 	res, check := self.attributes[name]
 	return res, check

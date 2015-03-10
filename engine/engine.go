@@ -20,12 +20,17 @@ func NewEngine() Engine {
 	return result
 }
 
-func (self Engine) AddFunction(name string, value float64) {
+func (self Engine) Output() float64 {
+	return self.result
+}
+
+func (self *Engine) AddFunction(name string, value float64) {
 	self.functionsOutput[name] = value
 }
 
-func (self Engine) FunctionOutput(name string) float64 {
-	return self.functionsOutput[name]
+func (self Engine) FunctionOutput(name string) (float64, bool) {
+	result, err := self.functionsOutput[name]
+	return result, err
 }
 
 func (self Engine) Compute() {
