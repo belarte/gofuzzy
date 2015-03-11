@@ -20,7 +20,7 @@ func NewEngine() Engine {
 	return result
 }
 
-func (self Engine) Output() float64 {
+func (self *Engine) Output() float64 {
 	return self.result
 }
 
@@ -28,18 +28,18 @@ func (self *Engine) AddFunction(name string, value float64) {
 	self.functionsOutput[name] = value
 }
 
-func (self Engine) FunctionOutput(name string) (float64, bool) {
+func (self *Engine) FunctionOutput(name string) (float64, bool) {
 	result, err := self.functionsOutput[name]
 	return result, err
 }
 
-func (self Engine) Compute() {
+func (self *Engine) Compute() {
 	self.Fuzzify(Object{})
 	self.Infer()
 	self.Defuzzify()
 }
 
-func (self Engine) Fuzzify(obj Object) {
+func (self *Engine) Fuzzify(obj Object) {
 	for key := range self.functionsOutput {
 		delete(self.functionsOutput, key)
 	}
@@ -49,7 +49,7 @@ func (self Engine) Fuzzify(obj Object) {
 	}
 }
 
-func (self Engine) Infer() {
+func (self *Engine) Infer() {
 	for key := range self.rulesOutputValue {
 		delete(self.rulesOutputValue, key)
 		delete(self.rulesOutputExpression, key)
@@ -62,7 +62,7 @@ func (self Engine) Infer() {
 	}
 }
 
-func (self Engine) Defuzzify() {
+func (self *Engine) Defuzzify() {
 	min, max := self.getMinMax()
 
 	self.result = Operators[defuzzyOperator](min, max)
@@ -70,7 +70,7 @@ func (self Engine) Defuzzify() {
 	self.isComputed = true
 }
 
-func (self Engine) getMinMax() (float64, float64) {
+func (self *Engine) getMinMax() (float64, float64) {
 	min := math.MaxFloat64
 	max := -math.MaxFloat64
 

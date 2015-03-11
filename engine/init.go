@@ -32,7 +32,7 @@ func Init() {
 	andOperator = "min"
 	orOperator = "max"
 	defuzzyOperator = "cog"
-	steps = 1000
+	steps = 5000000
 }
 
 func Open(name string) error {

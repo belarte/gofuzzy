@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"github.com/belarte/gofuzzy/utilities"
 	"testing"
 )
 
@@ -28,22 +29,30 @@ func SetUp() {
 	}
 	if fun, err := NewMembershipFunction("response", "trapezoidal", []float64{-90, -90, -90, 0}); err == nil {
 		knowledgeBase.AddFunction("decelerate", fun)
+		if expr, err := Parse("fast or close"); err == nil {
+			knowledgeBase.AddRule("decelerate", Rule{"decelerate", expr, fun})
+		}
 	}
 	if fun, err := NewMembershipFunction("response", "trapezoidal", []float64{-90, 0, 0, 90}); err == nil {
 		knowledgeBase.AddFunction("keep", fun)
+		if expr, err := Parse("good and far"); err == nil {
+			knowledgeBase.AddRule("keep", Rule{"keep", expr, fun})
+		}
 	}
 	if fun, err := NewMembershipFunction("response", "trapezoidal", []float64{0, 90, 90, 90}); err == nil {
 		knowledgeBase.AddFunction("accelerate", fun)
+		if expr, err := Parse("slow and far"); err == nil {
+			knowledgeBase.AddRule("accelerate", Rule{"accelerate", expr, fun})
+		}
 	}
 }
 
 func TestCompute(t *testing.T) {
+	SetUp()
 	t.Error("TODO")
 }
 
 func TestFuzzify(t *testing.T) {
-	SetUp()
-
 	engine.Fuzzify(testObject)
 
 	functionsName := [...]string{"slow", "good", "fast", "close", "far"}
@@ -62,9 +71,50 @@ func TestFuzzify(t *testing.T) {
 }
 
 func TestInfer(t *testing.T) {
-	t.Error("TODO")
+	engine.Fuzzify(testObject)
+	engine.Infer()
+
+	rulesName := [...]string{"keep", "accelerate", "decelerate"}
+	expectedValues := [...]float64{0.25, 0, 0.75}
+
+	for i, rule := range rulesName {
+		output, check := engine.rulesOutputValue[rule]
+		if !check {
+			t.Error("Error accessing rule `", rule, "'")
+		}
+
+		expected := expectedValues[i]
+		if output != expected {
+			t.Errorf("Expected: %v, got: %v", expected, output)
+		}
+	}
 }
 
 func TestDefuzzify(t *testing.T) {
-	t.Error("TODO")
+	engine.Fuzzify(testObject)
+	engine.Infer()
+
+	defuzzyOperator = "cog"
+	engine.Defuzzify()
+	if !engine.isComputed {
+		t.Error("Return value not computed...")
+	}
+
+	output := engine.result
+	expected := -25.3152
+	if !utilities.CompareEpsilon(output, expected) {
+		t.Errorf("Expected: %v, got: %v", expected, output)
+	}
+
+	defuzzyOperator = "mm"
+	engine.Defuzzify()
+	if !engine.isComputed {
+		t.Error("Return value not computed...")
+	}
+
+	output = engine.result
+	expected = -78.75
+	if !utilities.CompareEpsilon(output, expected) {
+		t.Errorf("Expected: %v, got: %v", expected, output)
+	}
 }
