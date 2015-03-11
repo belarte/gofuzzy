@@ -35,7 +35,7 @@ func SetUp() {
 	if fun, err := NewMembershipFunction("response", "trapezoidal", []float64{0, 90, 90, 90}); err == nil {
 		knowledgeBase.AddFunction("accelerate", fun)
 	}
-	}
+}
 
 func TestCompute(t *testing.T) {
 	t.Error("TODO")

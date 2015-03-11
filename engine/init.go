@@ -80,7 +80,11 @@ func generateFunction(def FunctionDefinition) {
 
 func generateRule(def RuleDefinition) {
 	if expr, err := Parse(def.Definition); err == nil {
-		knowledgeBase.AddRule(def.Name, Rule{def.Name, expr, nil})
+		if function, check := knowledgeBase.Function(def.Output); check {
+			if output, ok := function.(MembershipFunction); ok {
+				knowledgeBase.AddRule(def.Name, Rule{def.Name, expr, output})
+			}
+		}
 	}
 }
 
@@ -102,4 +106,5 @@ type RuleDefinition struct {
 	XMLName    xml.Name `xml:"rule"`
 	Name       string   `xml:"name,attr"`
 	Definition string   `xml:"definition,attr"`
+	Output     string   `xml:"definition,attr"`
 }

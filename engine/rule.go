@@ -1,18 +1,18 @@
 package engine
 
 import (
-	"math"
 	"log"
+	"math"
 )
 
 type Rule struct {
 	name   string
 	input  Expression
-	output *MembershipFunction
+	output MembershipFunction
 }
 
 func (self Rule) Compute() (float64, MembershipFunction) {
-	return self.input(), *self.output
+	return self.input(), self.output
 }
 
 type Expression func() float64
