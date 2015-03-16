@@ -101,7 +101,7 @@ func TestDefuzzify(t *testing.T) {
 	}
 
 	output := engine.result
-	expected := -25.3152
+	expected := -25.3125
 	if !utilities.CompareEpsilon(output, expected) {
 		t.Errorf("Expected: %v, got: %v", expected, output)
 	}

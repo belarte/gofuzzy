@@ -5,7 +5,8 @@ import (
 )
 
 func COGDefuzzifier(min, max float64) float64 {
-	result := 0.0
+	sum := 0.0
+	weightedSum := 0.0
 	step := (max - min) / float64(steps)
 
 	x := min
@@ -15,11 +16,13 @@ func COGDefuzzifier(min, max float64) float64 {
 		x += step
 		yb := computeValue(x)
 
-		result += step * (ya + yb) / 2
+		temp := step * (ya + yb) / 2.
+		sum += temp
+		weightedSum += (x - step*0.5) * temp
 		ya = yb
 	}
 
-	return result
+	return weightedSum / sum
 }
 
 func MMDefuzzifier(min, max float64) float64 {
